@@ -1,4 +1,5 @@
 from dataclasses import asdict
+from contextlib import closing
 import http.client
 import json
 from pathlib import Path
@@ -24,7 +25,7 @@ class ConfigurationTests(unittest.TestCase):
         self.root = self.base / 'library'
         self.root.mkdir()
         self.catalog = self.root / 'catalog.sqlite'
-        with sqlite3.connect(self.catalog) as conn:
+        with closing(sqlite3.connect(self.catalog)) as conn:
             conn.execute('CREATE TABLE clips (' + ','.join('"' + name + '" TEXT' for name in CATALOG_COLUMNS) + ')')
         self.raw = dict(media_root=str(self.root), catalog_path=str(self.catalog), cache_path=str(self.base / 'cache'))
 
