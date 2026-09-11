@@ -1,0 +1,158 @@
+/* ---------------------------------------------------------------------------
+   Base + browser surfaces.
+
+   The parts nobody draws still carry the design. Selection, caret, scrollbars,
+   focus rings, placeholders and numerals all ship with browser defaults that
+   belong to no design system. They are themed here, deliberately.
+   --------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--linen);
+  font-family: var(--f-ui);
+  font-size: var(--t-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+dl,
+dd {
+  margin: 0;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* --- Numerals ------------------------------------------------------------
+   Anything that can change gets tabular figures. Proportional figures make a
+   scrolling column jitter and it reads as instability. */
+.num,
+td,
+dd,
+input[type='number'] {
+  font-variant-numeric: tabular-nums;
+}
+
+::selection {
+  background: var(--teal-wash);
+  color: var(--cream);
+}
+
+input,
+textarea,
+[contenteditable] {
+  caret-color: var(--teal);
+}
+
+::placeholder {
+  color: var(--linen-3);
+  opacity: 1;
+}
+
+/* Focus: visible on every interactive element, never removed without a
+   replacement. 2px offset so it reads against the rounded surfaces. */
+:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+  border-radius: var(--r-md);
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Scrollbars: pill thumb inset from a transparent track. Never hidden — on a
+   virtualised list the scrollbar is a position indicator. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--edge) transparent;
+}
+*::-webkit-scrollbar {
+  width: 11px;
+  height: 11px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--edge);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: var(--r-pill);
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--edge-hi);
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--cream);
+  -webkit-box-shadow: 0 0 0 1000px var(--ground) inset;
+}
+
+::marker {
+  color: var(--linen-3);
+}
+
+/* --- Shared roles -------------------------------------------------------- */
+.lbl {
+  font-size: var(--t-label);
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--linen-3);
+}
+
+.dt {
+  font-family: var(--f-data);
+  font-size: var(--t-data);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Cards float on the ground with a lit top edge, not a drop shadow. */
+.card {
+  background: var(--panel);
+  border-radius: var(--r-xl);
+  box-shadow: var(--lift);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

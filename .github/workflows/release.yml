@@ -1,0 +1,53 @@
+name: Windows release
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: python scripts/check_publication.py
+      - run: python -m pip install -r desktop/requirements.txt
+      - run: npm ci
+        working-directory: web
+      - run: npm run build
+        working-directory: web
+      - run: python -m unittest discover -s broll_catalog_backend/tests -v
+      - run: python -m unittest discover -s integrations/editor_spike -v
+      - run: node --test integrations/premiere_spike/importer.test.cjs
+      - run: python -m PyInstaller --clean --noconfirm desktop/vault.spec
+      - name: Build installer
+        shell: pwsh
+        env:
+          RELEASE_REF_TYPE: ${{ github.ref_type }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          $appVersion = python -c "import sys; sys.path.insert(0, 'broll_catalog_backend'); from app_release import APP_VERSION; print(APP_VERSION)"
+          if ($env:RELEASE_REF_TYPE -eq 'tag' -and $env:RELEASE_TAG -ne "v$appVersion") { throw 'Tag and APP_VERSION differ' }
+          & 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe' "/DAppVersion=$appVersion" desktop/installer.iss
+          if ($LASTEXITCODE -ne 0) { throw 'Installer build failed' }
+          (Get-FileHash output/BrollVaultSetup.exe -Algorithm SHA256).Hash.ToLower() + '  BrollVaultSetup.exe' | Set-Content output/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BrollVault-Windows
+          path: output/*
+      - name: Publish tagged release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: gh release create "$env:RELEASE_TAG" output/BrollVaultSetup.exe output/SHA256SUMS.txt --verify-tag --generate-notes --title "B-roll Vault $env:RELEASE_TAG"

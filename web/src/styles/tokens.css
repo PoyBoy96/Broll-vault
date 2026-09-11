@@ -1,0 +1,159 @@
+/* ---------------------------------------------------------------------------
+   Vault — design tokens
+   Generated from DESIGN.md at the repo root. DESIGN.md is normative; if these
+   two ever disagree, DESIGN.md wins and this file is the bug.
+
+   The system in one line: COOL GROUND, WARM INK. Teal is the machine, ember is
+   the human. Inverting that kills the design.
+
+   Every foreground/background pairing was verified by computation. Do not add
+   or alter a colour without re-running that check.
+   --------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: dark;
+
+  /* --- Surfaces: cool navy, layered tonally. No surface uses a shadow. --- */
+  --abyss: oklch(24% 0.035 250);
+  --ground: oklch(30% 0.040 250);
+  --panel: oklch(35% 0.042 250);
+  --raised: oklch(41% 0.045 250);
+  --edge: oklch(48% 0.045 250);
+  --edge-hi: oklch(58% 0.045 250);
+
+  /* --- Ink: warm. This inversion is the personality. ---------------------- */
+  --cream: oklch(95% 0.030 85);
+  --linen: oklch(89% 0.024 85);
+  --linen-2: oklch(80% 0.020 85);
+  --linen-3: oklch(75% 0.018 85);
+  --muted: oklch(58% 0.020 250); /* disabled only — documented AA exemption */
+
+  /* --- Machine vocabulary: cool ------------------------------------------
+     -hi variants are the TEXT values. The base values pass 3:1 as marks but
+     not 4.5:1 as body copy. Using a fill token as text is a bug.            */
+  --teal: oklch(76% 0.105 205);
+  --teal-hi: oklch(84% 0.100 200);
+  --teal-dim: oklch(56% 0.070 205);
+  --teal-wash: oklch(40% 0.060 205);
+  --slate: oklch(80% 0.026 250); /* low scorer confidence — colourless on purpose */
+
+  /* --- Human vocabulary: warm -------------------------------------------
+     Covers both "you did this" and "this is waiting on you".               */
+  --ember: oklch(72% 0.155 47);
+  --ember-hi: oklch(82% 0.130 58);
+  --ember-dim: oklch(52% 0.090 47);
+  --ember-wash: oklch(38% 0.070 45);
+
+  /* --- Broken only. Never a low score. ----------------------------------- */
+  --coral: oklch(73% 0.155 25);
+  --coral-hi: oklch(82% 0.115 27);
+
+  /* --- Type -------------------------------------------------------------- */
+  --f-ui: 'Figtree Variable', 'Figtree', ui-sans-serif, system-ui, -apple-system,
+    'Segoe UI', sans-serif;
+  --f-data: 'Martian Mono', ui-monospace, 'SFMono-Regular', 'Cascadia Mono', Consolas,
+    monospace;
+
+  --t-display: 1.75rem;
+  --t-headline: 1.0625rem;
+  --t-title: 0.9375rem;
+  --t-body: 0.875rem;
+  --t-row: 0.84375rem;
+  --t-label: 0.65625rem;
+  --t-data: 0.6875rem;
+
+  /* --- Space (4-unit base) ----------------------------------------------- */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 20px;
+  --s6: 24px;
+  --s8: 32px;
+
+  /* --- Shape: rounded is a commitment, not a garnish ---------------------- */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-xl: 18px;
+  --r-pill: 999px;
+
+  /* --- Depth -------------------------------------------------------------
+     Cards get a lit top edge, not a drop shadow. Real shadows are for the
+     three things that genuinely float: peek, popovers, command palette.    */
+  --lift: 0 1px 0 oklch(70% 0.04 250 / 0.06) inset;
+  --float: 0 10px 30px -8px oklch(14% 0.03 250 / 0.65),
+    0 3px 8px -2px oklch(14% 0.03 250 / 0.45);
+
+  /* --- Motion ------------------------------------------------------------- */
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 110ms;
+  --dur: 170ms;
+  --dur-slow: 260ms;
+
+  /* --- Density -----------------------------------------------------------
+     Row height and thumbnail size only. Type size holds across all three —
+     shrinking text is how density turns into illegibility.                 */
+  --row-h: 56px;
+  --thumb-w: 74px;
+
+  /* --- Layout ------------------------------------------------------------- */
+  --rail-w: 248px;
+  --detail-w: 316px;
+  --gutter: 16px;
+}
+
+/* Vault surface and type palette. Existing component aliases remain above
+   so the current dashboard can adopt the new visual language incrementally. */
+:root {
+  --bg: #11121c;
+  --surface-1: oklch(0.19 0.015 265);
+  --surface-2: oklch(0.24 0.018 265);
+  --border-subtle: oklch(0.3 0.02 260);
+  --border-default: oklch(0.38 0.02 260);
+  --accent: #2c82c5;
+  --accent-hover: #3d93d6;
+  --accent-active: #2470ac;
+  --accent-muted: #2c82c51a;
+  --text-primary: #fff;
+  --text-secondary: oklch(0.86 0.03 65);
+  --text-muted: oklch(0.6 0.03 55);
+  --abyss: var(--bg);
+  --ground: var(--bg);
+  --panel: var(--surface-1);
+  --raised: var(--surface-2);
+  --edge: var(--border-subtle);
+  --edge-hi: var(--border-default);
+  --cream: var(--text-primary);
+  --linen: var(--text-secondary);
+  --linen-2: var(--text-secondary);
+  --linen-3: var(--text-muted);
+  --muted: var(--text-muted);
+  --teal: var(--accent);
+  --teal-hi: var(--accent-hover);
+  --teal-dim: var(--accent-active);
+  --teal-wash: var(--accent-muted);
+  --ember: var(--accent);
+  --ember-hi: var(--accent-hover);
+  --ember-dim: var(--border-default);
+  --ember-wash: var(--accent-muted);
+  --f-ui: 'Jost', sans-serif;
+  --f-data: 'Jost', sans-serif;
+}
+
+:root[data-density='compact'] {
+  --row-h: 42px;
+  --thumb-w: 58px;
+}
+:root[data-density='comfortable'] {
+  --row-h: 72px;
+  --thumb-w: 96px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 1ms;
+    --dur: 1ms;
+    --dur-slow: 1ms;
+  }
+}

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><style>
+body { padding: 16px; color: #eee; background: #242424; font-size: 13px; }
+input { width: 100%; margin: 8px 0; } button { margin: 8px 8px 8px 0; }
+#status, #receipt { margin-top: 12px; white-space: pre-wrap; }
+</style></head><body>
+<h2>B-roll Vault · Phase 0</h2>
+<p>Connect to Vault, then send 1–5 catalog clips using the spike driver.</p>
+<label for="token">Runtime pairing token</label><input id="token" type="password">
+<button id="connect">Connect / retry</button><button id="disconnect">Disconnect</button>
+<p id="status" role="status">Disconnected</p><p id="receipt"></p>
+<p>Imports reference original files. No sequence or usage activity is created.</p>
+<script src="panel.js"></script>
+</body></html>

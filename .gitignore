@@ -1,0 +1,34 @@
+# Workstation data and credentials are never source artifacts.
+.env
+.env.*
+!.env.example
+*.sqlite*
+*.db
+*.csv
+*.tsv
+*.log
+*.pem
+*.key
+*.pfx
+*.p12
+settings.json
+catalog_mirror.json
+.venv/
+__pycache__/
+*.py[cod]
+*.tsbuildinfo
+node_modules/
+dist/
+build/
+output/
+cache/
+runtime/
+VaultData/
+.local/
+# Historical development snapshots and conversation notes stay local.
+Claude_handoff.md
+request.md
+broll_catalog_backend/server.py
+broll_catalog_backend/server_api_prev.py
+broll_catalog_backend/server_api_v2.py
+web/_to_delete/
