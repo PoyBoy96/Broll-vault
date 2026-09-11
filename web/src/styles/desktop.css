@@ -7,6 +7,7 @@
 .setup-card p { line-height: 1.7; margin-bottom: 18px; }
 .setup-card label { display: flex; flex-direction: column; gap: 9px; margin: 22px 0; color: var(--cream); }
 .setup-card input:not([type=checkbox]), .setup-card select { width: 100%; min-width: 0; padding: 12px; background: var(--ground); border: 1px solid var(--edge-hi); border-radius: 6px; color: var(--cream); }
+.setup-card select { height: auto; min-height: 48px; line-height: 1.5; appearance: auto; color-scheme: dark; }
 .setup-path { display: flex; gap: 8px; }
 .setup-note, .setup-footnote { color: var(--linen-2); font-size: 13px; }
 .setup-footnote { text-align: center; margin: 24px; }

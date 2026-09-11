@@ -36,6 +36,7 @@ from xml.sax.saxutils import escape as xml_escape
 from editor_spike import EditorSpike
 from app_config import SettingsStore
 from app_release import ReleaseChecker
+from catalog_io import readonly_catalog_uri
 
 
 # --------------------------------------------------------------------------
@@ -370,7 +371,7 @@ class Mirror:
         self.loading = True
         _log(f"Mirroring catalog from {DB_PATH} ...")
         try:
-            src = sqlite3.connect(Path(DB_PATH).as_uri() + "?mode=ro", uri=True, timeout=60)
+            src = sqlite3.connect(readonly_catalog_uri(Path(DB_PATH)), uri=True, timeout=60)
             try:
                 dst = sqlite3.connect(str(tmp))
                 try:

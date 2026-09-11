@@ -7,6 +7,7 @@ import os
 from pathlib import Path
 import sqlite3
 import tempfile
+from catalog_io import readonly_catalog_uri
 
 CATALOG_COLUMNS = {
     "clip_id", "relative_path", "absolute_path", "filename", "path_year", "review_year",
@@ -85,7 +86,7 @@ class SettingsStore:
         with os.scandir(root) as entries:
             next(entries, None)
         try:
-            with closing(sqlite3.connect(catalog.as_uri() + "?mode=ro", uri=True, timeout=5)) as conn:
+            with closing(sqlite3.connect(readonly_catalog_uri(catalog), uri=True, timeout=5)) as conn:
                 columns = {r[1] for r in conn.execute("PRAGMA table_info(clips)")}
                 if not CATALOG_COLUMNS.issubset(columns):
                     raise ValueError("This database is not a supported Vault catalog")

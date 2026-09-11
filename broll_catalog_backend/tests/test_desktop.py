@@ -2,18 +2,48 @@ from dataclasses import asdict
 from contextlib import closing
 import http.client
 import json
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 import sqlite3
 import sys
 import tempfile
 import threading
 import unittest
 from unittest.mock import patch
+from urllib.parse import urlsplit, unquote
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from app_config import Settings, SettingsStore, CATALOG_COLUMNS
+from catalog_io import readonly_catalog_uri
 from app_release import RELEASES_URL, ReleaseChecker, release_status, version_tuple
 import server_api
+
+
+class CatalogUriTests(unittest.TestCase):
+    def test_unc_server_is_in_path_instead_of_uri_authority(self):
+        path = PureWindowsPath('//catalog-host/footage/catalog #100%.sqlite')
+        uri = urlsplit(readonly_catalog_uri(path))
+        self.assertEqual(uri.netloc, '')
+        self.assertEqual(unquote(uri.path), path.as_posix())
+        self.assertEqual(uri.query, 'mode=ro')
+        self.assertEqual(uri.fragment, '')
+
+    def test_drive_uri_preserves_escaped_filename(self):
+        path = PureWindowsPath('D:/footage/catalog #100%.sqlite')
+        self.assertEqual(readonly_catalog_uri(path), path.as_uri() + '?mode=ro')
+
+    def test_connection_cannot_write_or_create_catalog(self):
+        with tempfile.TemporaryDirectory() as home:
+            path = Path(home) / 'catalog #100% café.sqlite'
+            with closing(sqlite3.connect(path)) as conn:
+                conn.execute('CREATE TABLE clips (clip_id TEXT)')
+            with closing(sqlite3.connect(readonly_catalog_uri(path), uri=True)) as conn:
+                self.assertEqual(conn.execute('SELECT count(*) FROM clips').fetchone()[0], 0)
+                with self.assertRaises(sqlite3.OperationalError):
+                    conn.execute("INSERT INTO clips VALUES ('example')")
+            missing = Path(home) / 'missing.sqlite'
+            with self.assertRaises(sqlite3.OperationalError):
+                sqlite3.connect(readonly_catalog_uri(missing), uri=True)
+            self.assertFalse(missing.exists())
 
 
 class ConfigurationTests(unittest.TestCase):
