@@ -1,5 +1,5 @@
 #ifndef AppVersion
-#define AppVersion "0.1.2"
+#define AppVersion "0.1.3"
 #endif
 [Setup]
 AppId={{F6D84621-B997-4634-85D1-8F3A172B4A6E}
@@ -30,7 +30,7 @@ Source: "..\dist\BrollVault\*"; DestDir: "{app}"; Flags: ignoreversion recursesu
 Name: "{group}\B-roll Vault"; Filename: "{app}\BrollVault.exe"
 
 [Run]
-; Always relaunch after a normal install/update; no optional unchecked launch box.
-Filename: "{app}\BrollVault.exe"; Flags: nowait skipifsilent; Description: "Open B-roll Vault"
+; Relaunch after both interactive installs and silent in-app updates.
+Filename: "{app}\BrollVault.exe"; Flags: nowait; Description: "Open B-roll Vault"
 
 ; No uninstall deletion of settings, cache, catalogs, bins, or source media.

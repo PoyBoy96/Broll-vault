@@ -10,7 +10,7 @@ Catalogs, source footage, saved bins, credentials and workstation settings are n
 
 ## Updates
 
-The bell checks this repository's public GitHub Releases at startup and every 15 minutes while Vault is open. It displays **Update available** for a newer stable version. **Download** and **Learn more** open the corresponding GitHub release page in your browser. Download the Windows installer there and run it. The installer closes the previous installed version and relaunches Vault after a normal interactive update. Silent installs do not launch interactive windows.
+The bell checks this repository's public GitHub Releases at startup and every 15 minutes while Vault is open. It displays **Update available** for a newer stable version. In the installed Windows app, **Download & install** downloads the installer from GitHub, checks its published SHA-256, installs the update silently over the existing app, and reopens Vault. **Learn more** opens the release page in your browser.
 
 Updates preserve configuration, caches and source media. Nothing installs in the background. Update checks can be switched off in Settings. No library data, paths, usage activity or Windows identity is sent to GitHub; only the public release request and application version in its User-Agent are sent. GitHub receives the usual network connection metadata.
 

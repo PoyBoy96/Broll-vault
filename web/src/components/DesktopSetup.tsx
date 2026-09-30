@@ -6,6 +6,7 @@ export type DesktopBridge = {
   choose_folder: () => Promise<string | null>
   choose_catalog: () => Promise<string | null>
   open_releases: (url: string) => Promise<void>
+  install_update: () => Promise<void>
   restart: () => Promise<void>
 }
 declare global { interface Window { pywebview?: { api: DesktopBridge } } }
@@ -90,7 +91,7 @@ export function DesktopSetup() {
           <p className="setup-note">Generating previews requires FFmpeg on this computer. Search and bins work without it.</p>
           <label>Primary editor<select value={settings!.primary_editor} onChange={e => change('primary_editor', e.target.value)}><option value="ask">Ask each time</option><option value="premiere">Premiere Pro</option><option value="resolve">DaVinci Resolve</option></select></label>
           <label className="setup-check"><input type="checkbox" checked={settings!.check_updates} onChange={e => change('check_updates', e.target.checked)} />Check GitHub Releases for updates</label>
-          <p className="setup-note">The bell announces new releases. Download opens GitHub; installing the update relaunches Vault.</p>
+          <p className="setup-note">The bell announces new releases. Download & install updates Vault and reopens it automatically.</p>
         </>}
         <footer className="setup-actions">
           <button type="button" className="btn btn--quiet" disabled={busy} onClick={() => setStep(step - 1)}>Back</button>
