@@ -6,7 +6,7 @@ import time
 import urllib.error
 import urllib.request
 
-APP_VERSION = "0.1.1"
+APP_VERSION = "0.1.2"
 REPOSITORY = "PoyBoy96/Broll-vault"
 RELEASES_URL = f"https://github.com/{REPOSITORY}/releases"
 

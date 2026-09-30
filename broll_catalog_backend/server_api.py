@@ -1226,6 +1226,18 @@ def _ffmpeg() -> Optional[str]:
     return shutil.which("ffmpeg")
 
 
+def _run_ffmpeg(cmd: List[str], timeout: Optional[float]) -> subprocess.CompletedProcess[None]:
+    kwargs = {
+        "check": True,
+        "stdout": subprocess.DEVNULL,
+        "stderr": subprocess.DEVNULL,
+        "timeout": timeout,
+    }
+    if hasattr(subprocess, "CREATE_NO_WINDOW"):
+        kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
+    return subprocess.run(cmd, **kwargs)
+
+
 def _thumb_local_path(clip_id: int) -> Path:
     return THUMB_DIR / f"{clip_id}.jpg"
 
@@ -1292,7 +1304,7 @@ def _grab_frame(clip_id: int, source: str, duration: Optional[float]) -> Optiona
             for attempt_seek in ([seek, 0.0] if seek > 0 else [0.0]):
                 cmd[cmd.index("-ss") + 1] = f"{attempt_seek:.2f}"
                 try:
-                    subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=FRAME_GRAB_TIMEOUT)
+                    _run_ffmpeg(cmd, FRAME_GRAB_TIMEOUT)
                 except Exception:
                     ok = False
                 else:
@@ -1373,7 +1385,7 @@ def _ensure_preview(source: str, clip_id: int, duration: float, fps: int, width:
         ]
         with _FFMPEG_SLOTS:
             try:
-                subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=PREVIEW_TIMEOUT)
+                _run_ffmpeg(cmd, PREVIEW_TIMEOUT)
             except Exception:
                 try:
                     tmp.unlink()
